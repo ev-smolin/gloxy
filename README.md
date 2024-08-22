@@ -18,3 +18,15 @@ I wanted a really simple tool for two purposes:
  have the Admin console open and pointing directly to Couch (so the HTML
  requests weren't logged), with the replication done through Gloxy so that I
  could see every juicy detail.
+
+## Building
+
+    go build
+
+If successful, you'll get 'gloxy' binary.
+
+## Usage examples
+
+    ./gloxy --port 8080 http://example.com
+
+Gloxy will listen 0.0.0.0:8080 and reverse-proxy incoming requests to http://example.com
