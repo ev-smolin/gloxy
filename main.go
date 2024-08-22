@@ -58,15 +58,16 @@ func IsPrintable(header http.Header) bool {
  * requests made of it.
  */
 func (self *GloxyTransport) RoundTrip(req *http.Request) (res *http.Response, err error) {
-	res, err = http.DefaultTransport.RoundTrip(req)
-	if err != nil {
-		return
-	}
 
 	body := IsPrintable(req.Header)
 	reqDump, _ := httputil.DumpRequest(req, body)
 	if !body {
 		reqDump = append(reqDump, []byte("BINARY\n\n")...)
+	}
+
+	res, err = http.DefaultTransport.RoundTrip(req)
+	if err != nil {
+		return
 	}
 
 	body = IsPrintable(res.Header)
@@ -76,8 +77,8 @@ func (self *GloxyTransport) RoundTrip(req *http.Request) (res *http.Response, er
 	}
 
 	fmt.Printf("\n---\n\n")
-	fmt.Printf("%s > %s:\n%s", req.RemoteAddr, flag.Arg(0), reqDump)
-	fmt.Printf("%s < %s:\n%s", flag.Arg(0), req.RemoteAddr, resDump)
+	fmt.Printf("%s > %s:\n%s\n\n", req.RemoteAddr, flag.Arg(0), reqDump)
+	fmt.Printf("%s < %s:\n%s\n\n", flag.Arg(0), req.RemoteAddr, resDump)
 	fmt.Printf("\n")
 
 	return
